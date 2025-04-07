@@ -12,7 +12,9 @@ describe('Compartir un video', () => {
     cy.get('button[aria-label="Compartir"]', { timeout: 15000 })
       .filter(':visible')
       .should('be.visible')
-      .click({ force: true });
+      .click({ force: true,
+                multiple: true
+       });
 
     // Verifica que el panel de compartir se muestra
     cy.get('ytd-unified-share-panel-renderer', { timeout: 10000 })
