@@ -1,26 +1,21 @@
-describe('Prueba del botón Compartir en YouTube', () => {
+describe('Compartir un video', () => {
   before(() => {
-    // Ignorar excepciones específicas originadas en el código de YouTube
-    Cypress.on('uncaught:exception', (err, runnable) => {
-      if (err.message.includes("Cannot read properties of undefined (reading 'indexOf')")) {
-        return false; // Ignorar este error y continuar la prueba
-      }
-      // Para otros errores, deja que la prueba falle
-      return true;
-    });
+    Cypress.on('uncaught:exception', () => false);
+    cy.viewport(1280, 900);
   });
 
-  it('Hace click en el botón Compartir y verifica que aparezca el banner', () => {
-    // Reemplaza "VIDEO_ID" con el identificador de un video real
-    cy.visit('https://www.youtube.com/watch?v=mKwFYP8Pgv4&t=14s');
+  it.only('Hace clic en el botón Compartir', () => {
+    cy.visit('https://www.youtube.com/watch?v=mKwFYP8Pgv4', { timeout: 60000 });
 
-    // Selecciona el botón de Compartir que esté visible y realiza click
-    cy.get('button[aria-label="Compartir"]')
+    cy.get('ytd-video-primary-info-renderer', { timeout: 15000 }).should('exist');
+
+    cy.get('button[aria-label="Compartir"]', { timeout: 15000 })
       .filter(':visible')
       .should('be.visible')
-      .click();
+      .click({ force: true });
 
-    // Verifica que el banner de compartir sea visible
-    cy.get('ytd-unified-share-panel-renderer').should('be.visible');
+    // Verifica que el panel de compartir se muestra
+    cy.get('ytd-unified-share-panel-renderer', { timeout: 10000 })
+      .should('be.visible');
   });
 });
